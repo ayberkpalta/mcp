@@ -1,6 +1,6 @@
 """
-Gelişmiş MCP Agent Kullanım Örneği
-Bu dosya size nasıl kendi agent'larınızı oluşturacağınızı gösterir
+Advanced MCP Agent Usage Example
+This file demonstrates how to build your own agents.
 """
 
 import asyncio
@@ -9,14 +9,14 @@ from mcp_agent.app import MCPApp
 from mcp_agent.agents.agent import Agent
 from mcp_agent.workflows.llm.augmented_llm_openai import OpenAIAugmentedLLM
 
-# Özel fonksiyonlarımızı import edelim
+# Import custom functions
 from custom_functions import (
     divide_numbers, power_numbers, factorial, 
     calculate_area_circle, fibonacci,
     reverse_string, count_words, to_uppercase
 )
 
-# Mevcut fonksiyonlar
+# Built-in functions
 def add_numbers(a: int, b: int) -> int:
     """Adds two numbers."""
     print(f"Math expert is adding {a} and {b}")
@@ -27,89 +27,88 @@ def multiply_numbers(a: int, b: int) -> int:
     print(f"Math expert is multiplying {a} and {b}")
     return a * b
 
-# MCP App'i başlat
+# Initialize MCP App
 app = MCPApp(
     name="advanced_mcp_agent",
     settings=".mcp_agent.config.yaml"
 )
 
 async def advanced_example():
-    """Gelişmiş MCP Agent kullanım örneği"""
+    """Advanced usage example of MCP Agent"""
     async with app.run() as agent_app:
         logger = agent_app.logger
         context = agent_app.context
         
-        # 1. Matematik Agent'ı - Tüm matematik fonksiyonları ile
+        # 1. Math Agent - Handles all math functions
         math_agent = Agent(
             name="advanced_math_agent",
-            instruction="""Sen gelişmiş matematik uzmanısın. 
-            Toplama, çarpma, bölme, üs alma, faktöriyel, 
-            fibonacci ve daire alanı hesaplama fonksiyonlarına erişimin var.
-            Kullanıcının isteğini analiz et ve uygun fonksiyonu kullan.""",
+            instruction="""You are an advanced math expert.
+            You have access to addition, multiplication, division, exponentiation,
+            factorial, fibonacci, and circle area calculation functions.
+            Analyze the user's request and use the appropriate function.""",
             functions=[
                 add_numbers, multiply_numbers, divide_numbers, 
                 power_numbers, factorial, fibonacci, calculate_area_circle
             ],
         )
         
-        # 2. String Agent'ı - Metin işlemleri için
+        # 2. String Agent - Handles text operations
         string_agent = Agent(
             name="string_agent", 
-            instruction="""Sen metin işleme uzmanısın.
-            Metinleri tersine çevirme, kelime sayma ve büyük harfe çevirme 
-            fonksiyonlarına erişimin var.""",
+            instruction="""You are a text processing expert.
+            You have access to reverse string, count words,
+            and convert to uppercase functions.""",
             functions=[reverse_string, count_words, to_uppercase],
         )
         
-        # Matematik Agent'ını test et
+        # Test the Math Agent
         async with math_agent:
-            logger.info("=== MATEMATİK AGENT TESTİ ===")
+            logger.info("=== MATH AGENT TEST ===")
             
             llm = await math_agent.attach_llm(OpenAIAugmentedLLM)
             
-            # Farklı matematik işlemleri test et
             test_queries = [
-                "5 ile 3'ü topla, sonucu 2 ile çarp",
-                "10'u 3'e böl",
-                "2'nin 8'inci kuvvetini hesapla", 
-                "5'in faktöriyelini bul",
-                "Fibonacci serisinin 10. elemanını hesapla",
-                "Yarıçapı 5 olan dairenin alanını hesapla"
+                "Add 5 and 3, then multiply the result by 2",
+                "Divide 10 by 3",
+                "Calculate 2 raised to the power of 8", 
+                "Find the factorial of 5",
+                "Find the 10th number in the Fibonacci sequence",
+                "Calculate the area of a circle with radius 5"
             ]
             
             for query in test_queries:
                 try:
-                    logger.info(f"Soru: {query}")
+                    logger.info(f"Query: {query}")
                     result = await llm.generate_str(message=query)
-                    logger.info(f"Cevap: {result}")
+                    logger.info(f"Answer: {result}")
                     print("-" * 50)
                 except Exception as e:
-                    logger.error(f"Hata: {e}")
+                    logger.error(f"Error: {e}")
         
-        # String Agent'ını test et  
+        # Test the String Agent  
         async with string_agent:
-            logger.info("=== STRING AGENT TESTİ ===")
+            logger.info("=== STRING AGENT TEST ===")
             
             llm = await string_agent.attach_llm(OpenAIAugmentedLLM)
             
             string_queries = [
-                "Bu metni tersine çevir: 'Merhaba Dünya'",
-                "Bu cümledeki kelime sayısını bul: 'Python ile MCP agent geliştiriyorum'",
-                "Bu metni büyük harfe çevir: 'mcp agent çok güçlü'"
+                "Reverse this text: 'Hello World'",
+                "Count the number of words in this sentence: 'I am developing an MCP agent with Python'",
+                "Convert this text to uppercase: 'mcp agent is very powerful'"
             ]
             
             for query in string_queries:
                 try:
-                    logger.info(f"Soru: {query}")
+                    logger.info(f"Query: {query}")
                     result = await llm.generate_str(message=query)
-                    logger.info(f"Cevap: {result}")
+                    logger.info(f"Answer: {result}")
                     print("-" * 50)
                 except Exception as e:
-                    logger.error(f"Hata: {e}")
+                    logger.error(f"Error: {e}")
 
 if __name__ == "__main__":
-    print("🚀 Gelişmiş MCP Agent örneği başlatılıyor...")
+    print("🚀 Launching Advanced MCP Agent Example...")
     start = time.time()
     asyncio.run(advanced_example())
     end = time.time()
-    print(f"✅ Toplam çalışma süresi: {end - start:.2f} saniye")
+    print(f"✅ Total runtime: {end - start:.2f} seconds")
