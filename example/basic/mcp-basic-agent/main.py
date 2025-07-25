@@ -29,7 +29,7 @@ settings = Settings(
         }
     ),
     openai=OpenAISettings(
-        api_key="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",
+        api_key=".....",
         base_url="https://openrouter.ai/api/v1",
         default_model="anthropic/claude-3.5-sonnet",
     ),
