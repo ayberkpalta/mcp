@@ -1,0 +1,24 @@
+execution_engine: "asyncio"
+
+logger:
+  type: "console"
+  level: "info"
+
+mcp:
+  servers:
+    fetch:
+      command: "uvx"
+      args: ["mcp-server-fetch"]
+    filesystem:
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-filesystem"]
+
+# OpenRouter üzerinden Anthropic Claude kullanımı
+anthropic:
+  api_key: "..."
+  base_url: "https://openrouter.ai/api/v1"
+  default_model: "anthropic/claude-3.5-sonnet"
+
+openai:
+  api_key: "......"
+  default_model: "gpt-3.5-turbo"
